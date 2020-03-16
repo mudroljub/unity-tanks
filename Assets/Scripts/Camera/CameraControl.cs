@@ -4,8 +4,9 @@ public class CameraControl : MonoBehaviour
 {
     public float m_DampTime = 0.2f;                 
     public float m_ScreenEdgeBuffer = 4f;           
-    public float m_MinSize = 6.5f;                  
-    [HideInInspector] public Transform[] m_Targets; // array of transforms of all tanks
+    public float m_MinSize = 6.5f;
+    // [HideInInspector]
+    public Transform[] m_Targets; // array of transforms of all tanks
 
 
     private Camera m_Camera;                        
@@ -67,27 +68,24 @@ public class CameraControl : MonoBehaviour
     private float FindRequiredSize()
     {
         Vector3 desiredLocalPos = transform.InverseTransformPoint(m_DesiredPosition);
-
         float size = 0f;
 
+        // ide kroz tenkove, trazi najvecu velicinu i to uzima
         for (int i = 0; i < m_Targets.Length; i++)
         {
             if (!m_Targets[i].gameObject.activeSelf)
                 continue;
 
             Vector3 targetLocalPos = transform.InverseTransformPoint(m_Targets[i].position);
-
             Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
 
+            // TODO: proslediti tri argumenta max funkciji
             size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.y));
-
             size = Mathf.Max (size, Mathf.Abs (desiredPosToTarget.x) / m_Camera.aspect);
         }
         
         size += m_ScreenEdgeBuffer;
-
         size = Mathf.Max(size, m_MinSize);
-
         return size;
     }
 
@@ -95,9 +93,7 @@ public class CameraControl : MonoBehaviour
     public void SetStartPositionAndSize()
     {
         FindAveragePosition();
-
         transform.position = m_DesiredPosition;
-
         m_Camera.orthographicSize = FindRequiredSize();
     }
 }
