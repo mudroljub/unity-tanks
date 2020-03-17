@@ -71,7 +71,6 @@ public class TankMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Move and turn the tank.
         Move ();
         Turn ();
     }
