@@ -23,14 +23,11 @@ public class TankMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
     }
 
-
     private void OnEnable ()
     {
         m_Rigidbody.isKinematic = false;
-        m_MovementInputValue = 0f;
-        m_TurnInputValue = 0f;
+        m_MovementInputValue = m_TurnInputValue = 0f;
     }
-
 
     private void OnDisable ()
     {
@@ -42,44 +39,35 @@ public class TankMovement : MonoBehaviour
     {
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
-
         m_OriginalPitch = m_MovementAudio.pitch;
     }
 
     private void Update()
     {
-        // Store the player's input and make sure the audio for the engine is playing.
         m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
         m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
-
         EngineAudio ();
     }
 
+    private bool ifIddle() {
+        return Mathf.Abs(m_MovementInputValue) < 0.1f && Mathf.Abs(m_TurnInputValue) < 0.1f;
+    }
 
     private void EngineAudio()
     {
-        // Play the correct audio clip based on whether or not the tank is moving and what audio is currently playing.
-        if (Mathf.Abs (m_MovementInputValue) < 0.1f && Mathf.Abs (m_TurnInputValue) < 0.1f) // if iddle
+        if (ifIddle() && m_MovementAudio.clip == m_EngineDriving)
         {
-            if (m_MovementAudio.clip == m_EngineDriving)
-            {
-                m_MovementAudio.clip = m_EngineIdling;
-                m_MovementAudio.pitch = Random.Range (m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
-                m_MovementAudio.Play ();
-            }
-
+            m_MovementAudio.clip = m_EngineIdling;
+            m_MovementAudio.pitch = Random.Range (m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+            m_MovementAudio.Play ();
         }
-        else 
+        if (!ifIddle() && m_MovementAudio.clip == m_EngineIdling)
         {
-            if (m_MovementAudio.clip == m_EngineIdling)
-            {
-                m_MovementAudio.clip = m_EngineDriving;
-                m_MovementAudio.pitch = Random.Range(m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
-                m_MovementAudio.Play ();
-            }
+            m_MovementAudio.clip = m_EngineDriving;
+            m_MovementAudio.pitch = Random.Range (m_OriginalPitch - m_PitchRange, m_OriginalPitch + m_PitchRange);
+            m_MovementAudio.Play ();
         }
     }
-
 
     private void FixedUpdate()
     {
