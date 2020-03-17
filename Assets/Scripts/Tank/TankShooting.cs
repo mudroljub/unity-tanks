@@ -38,12 +38,7 @@ public class TankShooting : MonoBehaviour
         // Track the current state of the fire button and make decisions based on the current launch force.
         m_AimSlider.value = m_MinLaunchForce;
 
-        if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
-        {
-            m_CurrentLaunchForce = m_MaxLaunchForce;
-            Fire ();
-        }
-        else if (Input.GetButtonDown(m_FireButton))
+        if (Input.GetButtonDown(m_FireButton))
         {
             m_Fired = false;
             m_CurrentLaunchForce = m_MinLaunchForce;
