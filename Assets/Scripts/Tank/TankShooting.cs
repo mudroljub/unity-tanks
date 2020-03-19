@@ -26,7 +26,6 @@ public class TankShooting : MonoBehaviour
         m_AimSlider.value = m_MinLaunchForce;
     }
 
-
     private void Start()
     {
         m_FireButton = "Fire" + m_PlayerNumber;
@@ -56,7 +55,6 @@ public class TankShooting : MonoBehaviour
         }
     }
 
-
     private void Fire()
     {
         // Instantiate and launch the shell.
@@ -65,7 +63,6 @@ public class TankShooting : MonoBehaviour
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play ();
-
         m_CurrentLaunchForce = m_MinLaunchForce;
     }
 }
